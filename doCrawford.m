@@ -1,6 +1,7 @@
-function [stats] = doCrawford(thisVarStr,data,conditionNames)
+function [stats] = doCrawford(thisVarStr,data,conditionNames,outImageDir,axisVal)
 %% Crawford on the seven targets per condition
-axisVal = [0 8 -5 5];
+
+
 
 fprintf('Crawford Stats for variable:\n%s \n================\n', thisVarStr)
 
@@ -30,17 +31,26 @@ for c = 1:4
     fprintf('Control Group N for Target %s: %s\n',num2str(t),num2str(nC))
   end
   
-  allControls = data.targetMean(2:end,:,c); %only for plotting
+  allControls = data.targetMean(2:end,:,c); %only for plotting 
   
+  
+  close all
+  figure('position',[100,100,1200,1200])
+
   %% Crawford ttest
   stats{c}= runCrawford(patientScores,controlMean,controlStd,nC, ...
     1,axisVal,thisVarStr,allControls); %for plot, use 0 for no plot
   
   %% save plot
   title(currConditionName);
-  outName = fullfile('images',[thisVarStr,'_',currConditionName,'.eps']);
-  cmdStr = sprintf('export_fig %s -transparent',outName)
+  %outName = fullfile(outImageDir,[thisVarStr,'_',currConditionName,'.eps']);
+  outName = fullfile(outImageDir,[thisVarStr,'_',currConditionName]);
+  cmdStr = sprintf('export_fig %s.tiff -transparent',outName)
+  %cmdStr = sprintf('export_fig %s',outName)
   eval(cmdStr);
+  
+  h=gcf;
+  savefig(h,[outName,'.fig']);
   
   %% print stats
   disp('two tailed p (per target):')
