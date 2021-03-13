@@ -3,7 +3,7 @@
 %stats=runCrawford(patientScores,controlMean,controlSd,nC,1);
 
 function stats=runCrawford(patientScores,controlMean,controlSd,nC, ...
-  plotFig,axisVal,yLab,allControls,subPlotInfo)
+  plotFig,allControls)
 
 % structure of input
 mC=controlMean;%mean 
@@ -30,7 +30,7 @@ end
 
 % and plot the results with a nice error bar plot
 if(plotFig)
-    
+     
     CI2=abs(CI-repmat(mC',1,4));
     
     close all
@@ -52,13 +52,6 @@ if(plotFig)
     hold on
     plot(1:nCond,patientScores,'o','MarkerSize',18,'LineWidth',4, ...
       'Color',[1 0 1])
-    
-    %other formatting
-    xlabel('Target Position (degrees from midline)')
-    ylabel(yLab)
-    axis(axisVal);
-    xticklabels({[],'-28','-17','-11','0','11','17','28'});
-    set(gca,'box','off','color','none','TickDir','out');
     
 end
 

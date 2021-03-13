@@ -7,7 +7,7 @@ tmpIndex = cell2mat(data(2:end,1));
 idx = (find(tmpIndex == target)); 
 
 %Read data
-targetStack = cell2mat(data2(idx,variable));
+targetStack = abs(cell2mat(data2(idx,variable))); %Change
 targetMean = mean(targetStack);
 targetStd = std(targetStack);
 
