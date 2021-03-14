@@ -20,8 +20,11 @@ for c = 1:4
 end
 Ncontrols = size(allControls{1},1); %assuming all targets/conditions same!
 
-
-listHand = {'LH','RH'};
+%Important - 
+%setup so good condition first (e.g. RH or Free Vision) to then subtract bad condition
+%(e.g. LH or Per Vision). Thus, plotBDST(taskY - TaskX) means that a positive 
+%score shows the degree of impairment at LH or at Per Vision
+listHand = {'RH','LH'};
 listVision = {'FREE','PER'};
 
 %% --- Compare Vision First: free vs per ---%
@@ -75,7 +78,7 @@ for hand = 1:2
   plotBDST(taskX,taskY,Ncontrols)
   
   %% other plot formatting
-  titleStr = ['CompareVision-FreeSubtractPeripheral-',currHand];
+  titleStr = ['CompareVision-PeripheralSubtractFree-',currHand];
   
   xlabel(['Target Position (',char(176),' from midline)']);
   ylabel(thisVarStr)
@@ -100,7 +103,7 @@ end
   
 
 
-%% --- Now Compare Hand : LH vs RH ---%
+%% --- Now Compare Hand : RH vs LH ---%
 %strreplace hand/vision
 currHand = [];
 currVision = [];
