@@ -2,7 +2,7 @@ function [stats] = doCrawfordTtest_allTargets(thisVarStr,data,conditionNames,out
 
 
 %% Crawford ttests on the seven targets, per condition
-fprintf('Crawford Stats for seven targets \n Variable:\n%s \n================\n', thisVarStr)
+fprintf('Crawford Stats for SEVEN TARGETS \n Variable:\n%s \n================\n', thisVarStr)
 for c = 1:4
   
   currConditionName = conditionNames{c};
@@ -33,7 +33,7 @@ for c = 1:4
   %% other plot formatting
   xlabel(['Target Position (',char(176),' from midline)']);
   ylabel(thisVarStr)
-  xlim([0 length(patientScores)+1])
+  xlim([0 length(patientScores)+1]); set(gca,'XTick',[0:1:length(patientScores)+1]);
   ylim(axisVal_y)
   xticklabels({[],'-28','-17','-11','0','11','17','28'});
   set(gca,'box','off','color','none','TickDir','out','fontsize',18);

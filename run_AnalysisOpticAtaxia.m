@@ -6,13 +6,16 @@
 % - Put export_fig on path e.g. !git clone https://github.com/altmany/export_fig
 
 clear
+diary OFF
+
 %Parameters
 conditionNames = {'RHFREE','RHPER','LHFREE','LHPER'};
-done_rawData = 1; %FALSE = read rawData with AL10 (dropped for noResponses)
 
+done_rawData = 1; %FALSE = read rawData with AL10 (dropped for noResponses)
 if ~done_rawData
   examineRawData_checkTrialDistribution
 end
+
 
 conditionNames = {'RHFREE','RHPER','LHFREE','LHPER'};
 sNames = {
@@ -65,16 +68,41 @@ disp('done writing rawData to data.mat')
 
 %% ==== ANALYSIS ==== %%
 
-listVarStrs = {'ANGerr'};
-listAxisVal_allTargets_y = {[-5 5]};
-listAxisVal_sideOfSpace_y = {[-5 5]};
-
+listVarStrs = { 'ANGerr', ...
+                'XError', ... %delete spaces later, so not 'X Error ' etc
+                'YError', ...
+                'reactiontime', ...
+                'movementtime'}; 
+listAxisVal_allTargets_y_ttest = {  [-8 8], ...
+                                    [-35 35], ...
+                                    [-50 50], ...
+                                    [0 1500], ...
+                                    [0 1800]};
+listAxisVal_sideOfSpace_y_ttest = { [-4 4], ...
+                                    [-20 20], ...
+                                    [-35 35], ...
+                                    [0 1500], ...
+                                    [0 1800]};
+listAxisVal_allTargets_y_BDST = {   [-8 8], ...
+                                    [-35 35], ...
+                                    [-50 50], ...
+                                    [-800 1500], ...
+                                    [-1800 1800]};
+listAxisVal_sideOfSpace_y_BDST = {  [-4 4], ...
+                                    [-20 20], ...
+                                    [-35 35], ...
+                                    [-800 1500], ...
+                                    [-1800 1800]};
 for v = 1:length(listVarStrs)
   
   thisVarStr = listVarStrs{v};
-  axisVal_allTargets_y = listAxisVal_allTargets_y{v};
-  axisVal_sideOfSpace_y = listAxisVal_sideOfSpace_y{v};
-
+  axisVal_allTargets_y_ttest = listAxisVal_allTargets_y_ttest{v};
+  axisVal_sideOfSpace_y_ttest = listAxisVal_sideOfSpace_y_ttest{v};
+  
+  axisVal_allTargets_y_BDST = listAxisVal_allTargets_y_BDST{v};
+  axisVal_sideOfSpace_y_BDST = listAxisVal_sideOfSpace_y_BDST{v};
+  
+  
   [data,tmpH] = getData(thisVarStr,rawData,sNames);
   
   
@@ -87,18 +115,15 @@ for v = 1:length(listVarStrs)
   mkdir(outDir)
   
   
-%   diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-SingleBayes_ES.txt']));
-%  stats = doCrawfordTtest_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y);
-%   stats = doCrawfordTtest_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y);
-%   diary OFF
-  
-
-  diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-DissocsBayes_ES.txt']));
-  plotBDST_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y);
-  %plotBDST_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y);
+  diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-SingleBayes_ES.txt']));
+  stats = doCrawfordTtest_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y_ttest);
+  stats = doCrawfordTtest_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y_ttest);
   diary OFF
 
-
+  diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-DissocsBayes_ES.txt']));
+  plotBDST_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y_BDST);
+  plotBDST_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y_BDST);
+  diary OFF
 end
 
 %% repeat ANALYSIS with absolute error measures

@@ -1,15 +1,34 @@
 %% --- repeat but absolute the error values --- %%
+%just switches getData() with getData_AbsoluteVersion()
+%Also add '_ABSOLUTE' to thisVarStr so files are stored in new directories
 
-listVarStrs = {'ANGerr'}
-listAxisVal_allTargets_y = {[-1 5]};
-listAxisVal_sideOfSpace_y = {[-1 5]};
+listVarStrs = { 'ANGerr', ...
+                'XError', ... %delete spaces later, so not 'X Error ' etc
+                'YError'}; 
+listAxisVal_allTargets_y_ttest = {  [-8 8], ...
+                                    [-35 35], ...
+                                    [-50 50]};
+listAxisVal_sideOfSpace_y_ttest = { [-4 4], ...
+                                    [-20 20], ...
+                                    [-35 35]};
+listAxisVal_allTargets_y_BDST = {   [-8 8], ...
+                                    [-35 35], ...
+                                    [-50 50]};
+listAxisVal_sideOfSpace_y_BDST = {  [-4 4], ...
+                                    [-20 20], ...
+                                    [-35 35]};
+
 
 
 for v = 1:length(listVarStrs)
   
   thisVarStr = listVarStrs{v};
-  axisVal_allTargets_y = listAxisVal_allTargets_y{v};
-  axisVal_sideOfSpace_y = listAxisVal_sideOfSpace_y{v};
+  axisVal_allTargets_y_ttest = listAxisVal_allTargets_y_ttest{v};
+  axisVal_sideOfSpace_y_ttest = listAxisVal_sideOfSpace_y_ttest{v};
+  
+  axisVal_allTargets_y_BDST = listAxisVal_allTargets_y_BDST{v};
+  axisVal_sideOfSpace_y_BDST = listAxisVal_sideOfSpace_y_BDST{v};
+  
 
   [data,tmpH] = getData_AbsoluteVersion(thisVarStr,rawData,sNames); %change!
 
@@ -23,20 +42,13 @@ for v = 1:length(listVarStrs)
   end
   mkdir(outDir)
   
-  
-
-  
   diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-SingleBayes_ES.txt']));
-  stats = doCrawfordTtest_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y); %change
-  stats = doCrawfordTtest_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y); %change
-  % [h] = combinePlots(thisVarStr,outImageDir,axisVal) %doesnt work, subplot too tempormetnal
+  stats = doCrawfordTtest_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y_ttest);
+  stats = doCrawfordTtest_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y_ttest);
   diary OFF
-  
 
-%   diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-DissocsBayes_ES.txt']));
-%   plotBDST_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y);
-% %   plotBDST_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y);
-%   diary OFF
-
-
+  diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-DissocsBayes_ES.txt']));
+  plotBDST_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y_BDST);
+  plotBDST_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y_BDST);
+  diary OFF
 end
