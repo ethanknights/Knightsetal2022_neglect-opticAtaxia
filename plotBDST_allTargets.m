@@ -2,36 +2,79 @@ function [stats] = plotBDST_allTargets(thisVarStr,data,conditionNames,outDir,axi
 
 
 %% Print BDST data (and Plot), for seven targets, per condition
-fprintf('Printing Crawford BDST Input for seven targets \n Variable:\n%s \n================\n', thisVarStr)
+fprintf('Printing Crawford BDST Input for seven targets \nVariable:\n%s \n================\n', thisVarStr)
 
-
+%% gather each condition data
 for c = 1:4
   
   currConditionName = conditionNames{c};
   
-  controlMean = mean(data.targetMean(2:end,:,c));
-  controlStd = std(data.targetMean(2:end,:,c));
-  patientScores = data.targetMean(1,:,c);
-  nC = size(patientScores,2);
+  controlMean(:,c) = mean(data.targetMean(2:end,:,c));
+  controlStd(:,c) = std(data.targetMean(2:end,:,c));
+  patientScores(:,c) = data.targetMean(1,:,c);
+  nC(:,c) = size(patientScores,2);
 
-  %Print info for Crawford.exe
-  fprintf('Current Condition: %s\n=========\n',currConditionName)
-  fprintf('Control Group N: %s\n-----\n',num2str(nC))
+  %get each control's mean for plotting 
+  allControls{c} = data.targetMean(2:end,:,c);
+
+end
+
+
+listHands = {'LH','RH'};
+listVision = {'FREE','PER'};
+Ncontrols = size(allControls{1},1); %assuming all targets/conditions same!
+
+%% Compare Vision First: free vs per
+for hand = 1:2
+  
+  currHand = listHands{hand};
+  
+  fprintf('Comparing Free vs Peripheral for Hand: %s\n===========\n',currHand)
+
+  taskX.idx = contain([currHand,listVision{1}],conditionNames);
+  taskY.idx = contain([currHand,listVision{2}],conditionNames);
+  
+  taskX.controlMean   =   controlMean(:,taskX.idx);
+  taskX.controlStd    =   controlStd(:,taskX.idx);
+  taskX.patientScores =   patientScores(:,taskX.idx);
+  taskX.allControls   =   cell2mat(allControls(:,taskX.idx));
+ 
+  taskY.controlMean   =   controlMean(:,taskY.idx);
+  taskY.controlStd    =   controlStd(:,taskY.idx);
+  taskY.patientScores =   patientScores(:,taskY.idx);
+  taskY.allControls   =   cell2mat(allControls(:,taskY.idx));
+
+  %%correlation (pearson r) between control performance in taskX & taskY
   for t = 1:length(patientScores)
-    fprintf('Current Target: %s\n----------\n',num2str(t))
-    fprintf('Control Mean: %s\n',num2str(controlMean(t)))
-    fprintf('Control Std: %s\n',num2str(controlStd(t)))
-    fprintf('Patient Score: %s\n',num2str(patientScores(t)))
-    fprintf('\n--------\n')
+    [r,~] = corrcoef(taskX.allControls(:,t),taskY.allControls(:,t));
+    rr(t) = r(1,2);
   end
   
-  %get each control's mean for plotting 
-  allControls = data.targetMean(2:end,:,c);
+  %Print info for Crawford.exe
+  fprintf('TaskX = %s   Task Y = %s\n---------\n',listVision{1},listVision{2})
+  for t = 1:length(patientScores)
+    fprintf('Current Target: %s\n----------\n',num2str(t))
+    fprintf('Control Mean TaskX:        %s\n',num2str(taskX.controlMean(t)))
+    fprintf('Control Std TaskX:         %s\n',num2str(taskX.controlStd(t)))
+    fprintf('Control Mean TaskY:        %s\n',num2str(taskY.controlMean(t)))
+    fprintf('Control Std TaskY:         %s\n',num2str(taskY.controlStd(t)))
+    fprintf('Control Corr(TaskX,TaskY): %s\n',num2str(rr(t)))
+    fprintf('Control Group N: %s\n',num2str(Ncontrols))
+    fprintf('Patient Score TaskX:       %s\n',num2str(taskX.patientScores(t)))
+    fprintf('Patient Score TaskY:       %s\n',num2str(taskY.patientScores(t)))
+    fprintf('----------\n')
+  end
+  
+  %% plot
+  plotBDST(taskX,taskY,Ncontrols)
+  
+end
 
-  %% Crawford ttest (& plot)
-  plotType = 'allTargets'; % 'allTargets' , 'sideOfSpace'
-  stats{c}= runCrawford(patientScores,controlMean,controlStd,nC, ...
-    1,allControls); %for plot, use 0 for no plot
+  
+  
+
+  
+  
   
   %% other plot formatting
   xlabel(['Target Position (',char(176),' from midline)']);
@@ -43,34 +86,15 @@ for c = 1:4
   title(currConditionName);
   
   %% save plot
-  outDir2 = fullfile(outDir,'sevenTargets');
+  outDir2 = fullfile(outDir,'sevenTargets_BDST');
   if ~exist(outDir2)
     mkdir(outDir2)
   end
   outName = fullfile(outDir2,[thisVarStr,'_',currConditionName]);
   cmdStr = sprintf('export_fig %s.png -transparent',outName)
   eval(cmdStr);
-  
+   
   h=gcf;
   savefig(h,[outName,'.fig']);
-  
-  %% print stats
-  disp('two tailed p (per target):')
-  disp(stats{c}.p(2,:)') %2 is two-tailed
 
-  %disp('one tailed p (per target):')
-  %disp(stats{c}.p(1,:)) %1 is one-tailed
-
-  disp('point estimate of abnormality (per target):')
-  disp(stats{c}.p(3,:)') %% point estimate of abnormality (see paper)
-
-  disp('df, tvalue, (per target):')
-  disp([stats{c}.df(:),stats{c}.t(:)])
-
-  disp('CI (per target) 1:2 is 95% CI% CI-3:4 is 99%:')
-  disp([stats{c}.CI(:,1),stats{c}.CI(:,2),stats{c}.CI(:,3),stats{c}.CI(:,4)]) 
-
-
-end
-    
-end
+ end

@@ -27,8 +27,7 @@ for c = 1:4
   allControls = data.targetMean(2:end,:,c);
 
   %% Crawford ttest (& plot)
-  plotType = 'allTargets'; % 'allTargets' , 'sideOfSpace'
-  stats{c}= runCrawford_AbsoluteVersion(patientScores,controlMean,controlStd,nC, ...
+  stats{c}= runCrawford(patientScores,controlMean,controlStd,nC, ... %stats{c}= runCrawford_AbsoluteVersion(patientScores,controlMean,controlStd,nC, ... %not working
     1,allControls); %for plot, use 0 for no plot
   
   %% other plot formatting

@@ -87,22 +87,24 @@ for v = 1:length(listVarStrs)
   mkdir(outDir)
   
   
-  diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-SingleBayes_ES.txt']));
-  %stats = doCrawfordTtest_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y);
-  %stats = doCrawfordTtest_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y);
-  % [h] = combinePlots(thisVarStr,outImageDir,axisVal) %doesnt work, subplot too tempormetnal
-  diary OFF
+%   diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-SingleBayes_ES.txt']));
+%  stats = doCrawfordTtest_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y);
+%   stats = doCrawfordTtest_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y);
+%   diary OFF
   
 
-%   diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-DissocsBayes_ES.txt']));
-%   plotBDST_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y);
-% %   plotBDST_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y);
-%   diary OFF
+  diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-DissocsBayes_ES.txt']));
+  plotBDST_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y);
+  %plotBDST_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y);
+  diary OFF
 
 
 end
 
-repeatWithAbsolute %hacky.. but works for ANGERR_ABSOLUTE etc.
-%a branch would have been smarter!!
+%% repeat ANALYSIS with absolute error measures
+repeatWithAbsolute %ANGERR_ABSOLUTE etc. %a branch would have been smarter!!
+
+
+%% plot raw pointing coordinates
 
 

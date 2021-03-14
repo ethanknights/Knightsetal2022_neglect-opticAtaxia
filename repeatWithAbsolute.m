@@ -1,8 +1,8 @@
 %% --- repeat but absolute the error values --- %%
 
 listVarStrs = {'ANGerr'}
-listAxisVal_allTargets_y = {[-0.05 5]};
-listAxisVal_sideOfSpace_y = {[0 5]};
+listAxisVal_allTargets_y = {[-1 5]};
+listAxisVal_sideOfSpace_y = {[-1 5]};
 
 
 for v = 1:length(listVarStrs)
@@ -27,8 +27,8 @@ for v = 1:length(listVarStrs)
 
   
   diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-SingleBayes_ES.txt']));
-  stats = doCrawfordTtest_allTargets_AbsoluteVersion(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y); %change
-  stats = doCrawfordTtest_sideOfSpace_AbsoluteVersion(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y); %change
+  stats = doCrawfordTtest_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y); %change
+  stats = doCrawfordTtest_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y); %change
   % [h] = combinePlots(thisVarStr,outImageDir,axisVal) %doesnt work, subplot too tempormetnal
   diary OFF
   

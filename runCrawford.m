@@ -9,7 +9,7 @@ function stats=runCrawford(patientScores,controlMean,controlSd,nC, ...
 mC=controlMean;%mean 
 sC=controlSd;%STD 
 
-nCond=length(controlMean);%each column is a variable
+nCond=length(mC);%each column is a variable
 [c,d]=size(patientScores);%each column is a variable
 
 % check nCond matches for patient + control Data
@@ -35,7 +35,6 @@ if(plotFig)
     
     close all
     figure('position',[100,100,1200,1200])
-%     subplot(subPlotInfo(1),subPlotInfo(2),subPlotInfo(3));
    
     %Crawford cuttoff errorbar
     errorbar(1:nCond,mC,CI2(:,1),'Color',[0 0 0],'LineWidth',4,'LineStyle','none')
