@@ -18,12 +18,13 @@ for c = 1:4
   disp(conditionNames{c})
   patientScore = sum(data.nTrials(1,:,c))
   for controlN = 2:nSubs
-    cc(controlN) = sum(data.nTrials(controlN,:,c));
+    cc(controlN-1) = sum(data.nTrials(controlN,:,c));
   end
+  cc(1) = []; %drop AL10
   controlMean = mean(cc)
   controlStd = std(cc)
 
-  out = runCrawford(patientScore,controlMean,controlStd,nSubs,0);
+  out = runCrawford(patientScore,controlMean,controlStd,nSubs-1,0);
   fprintf('p value (two-tailed) = %s\n', num2str(out.p(2)))
 end
 
@@ -66,16 +67,18 @@ tmpH = rawD(1,2:end)'; %1 is partiicpant
 tmpD(2,:) = []; %drop AL11 as we do in main analysis
 
 tmp = sum(sum(tmpD))
-fprintf('total n eye error trials = %s\n', num2str( tmp * (100 / nTrials)) )
+fprintf('total percent eye error trials = %s\n', num2str( tmp * (100 / nTrials)) )
 
 %crawford t-test
 conditionRefs = [1,7;8,14];
 for c = 1:2
-  if c == 1; disp(tmpH{1}); elseif c == 2; disp(tmpH{8}); end
+  disp(tmpH{conditionRefs(c,1)});
   patientScore = sum(tmpD(1,conditionRefs(c,1) : conditionRefs(c,2)))
   for controlN = 2:nSubs
     cc(controlN) = sum(tmpD(controlN,conditionRefs(c,1) : conditionRefs(c,2)));
   end
+  cc(1) = []; %drop AL10
+  cc
   controlMean = mean(cc)
   controlStd = std(cc)
 
@@ -93,7 +96,26 @@ tmpH = rawD(1,2:end)'; %1 is partiicpant
 tmpD(2,:) = []; %drop AL11 as we do in main analysis
 
 tmp = sum(sum(tmpD))
-fprintf('total n HandErrors trials = %s\n', num2str( tmp * (100 / nTrials)) )
+fprintf('total percent HandErrors trials = %s\n', num2str( tmp * (100 / nTrials)) )
+
+%crawford t-test
+conditionRefs = [1,7;8,14; 15,21; 22,28];
+for c = 1:4
+  disp(tmpH{conditionRefs(c,1)});
+  patientScore = sum(tmpD(1,conditionRefs(c,1) : conditionRefs(c,2)))
+  for controlN = 2:nSubs
+    cc(controlN) = sum(tmpD(controlN,conditionRefs(c,1) : conditionRefs(c,2)));
+  end
+  cc(1) = []; %drop AL10
+  cc
+  controlMean = mean(cc)
+  controlStd = std(cc)
+
+  out = runCrawford(patientScore,controlMean,controlStd,nSubs,0);
+  fprintf('p value (two-tailed) = %s\n', num2str(out.p(2)))
+end
+
+
 
 %% nNoResponse
 sheetName = 'nNoResponses';
@@ -107,5 +129,21 @@ tmpD(2,:) = []; %drop AL11 as we do in main analysis
 tmp = sum(sum(tmpD))
 fprintf('total n noResponse trials = %s\n', num2str( tmp * (100 / nTrials)) )
 
+%crawford t-test
+conditionRefs = [1,7;8,14; 15,21; 22,28];
+for c = 1:4
+  disp(tmpH{conditionRefs(c,1)});
+  patientScore = sum(tmpD(1,conditionRefs(c,1) : conditionRefs(c,2)))
+  for controlN = 2:nSubs
+    cc(controlN) = sum(tmpD(controlN,conditionRefs(c,1) : conditionRefs(c,2)));
+  end
+  cc(1) = []; %drop AL10
+  cc
+  controlMean = mean(cc)
+  controlStd = std(cc)
+
+  out = runCrawford(patientScore,controlMean,controlStd,nSubs,0);
+  fprintf('p value (two-tailed) = %s\n', num2str(out.p(2)))
+end
 
 

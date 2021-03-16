@@ -1,3 +1,6 @@
+%% Written by Fraser Smith
+% Adapted to this project by Ethan Knights
+
 function [t,df,p,CI]=crawford_tCI(patientScores,controlMean,controlSd,nC)
 
 % control data needs to be a vector of control scores
