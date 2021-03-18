@@ -131,5 +131,5 @@ repeatWithAbsolute %ANGERR_ABSOLUTE etc. %a branch would have been smarter!!
 
 
 %% plot raw pointing coordinates
-
+plotRawPointingCoordinates
 
