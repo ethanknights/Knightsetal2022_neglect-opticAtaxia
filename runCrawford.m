@@ -44,7 +44,7 @@ if(plotFig)
     %all control lines
     for controlN = 1:length(allControls)
       hold on
-      line(1:nCond,allControls(controlN,:),'Color',[0.75 0.75 0.75],'LineWidth',1,'LineStyle','--')
+      line(1:nCond,allControls(controlN,:),'Color',[0    0.8314    0.9608],'LineWidth',1,'LineStyle','--')
     end
     
     %Patient circle markers
