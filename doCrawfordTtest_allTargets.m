@@ -48,8 +48,8 @@ for c = 1:4
   cmdStr = sprintf('export_fig %s.png -transparent',outName)
   eval(cmdStr);
   
-  h=gcf;
-  savefig(h,[outName,'.fig']);
+  %h=gcf;
+  %savefig(h,[outName,'.fig']);
   
   %% print stats
   disp('two tailed p (per target):')
