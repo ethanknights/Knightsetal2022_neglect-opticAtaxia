@@ -10,7 +10,7 @@ for c = 1:4
   controlMean = mean(data.targetMean(2:end,:,c));
   controlStd = std(data.targetMean(2:end,:,c));
   patientScores = data.targetMean(1,:,c);
-  nC = size(patientScores,2);
+  nC = length(data.targetMean(2:end,1)); %assuing patient = row1, and same nC for every target (so use col1)
 
   %Print info for Crawford.exe
   fprintf('Current Condition: %s\n=========\n',currConditionName)
@@ -27,7 +27,7 @@ for c = 1:4
   allControls = data.targetMean(2:end,:,c);
 
   %% Crawford ttest (& plot)
-  stats{c}= runCrawford(patientScores,controlMean,controlStd,nC, ...
+  stats{c} = runCrawford(patientScores,controlMean,controlStd,nC, ...
     1,allControls); %for plot, use 0 for no plot
   
   %% other plot formatting
