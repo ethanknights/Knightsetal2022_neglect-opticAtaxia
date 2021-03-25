@@ -120,8 +120,8 @@ for hand = 1:2
   cmdStr = sprintf('export_fig %s.png -transparent',outName)
   eval(cmdStr);
   
-  h=gcf;
-  savefig(h,[outName,'.fig']);
+  %h=gcf;
+  %savefig(h,[outName,'.fig']);
 end
 
 
@@ -197,8 +197,8 @@ for vision = 1:2
   cmdStr = sprintf('export_fig %s.png -transparent',outName)
   eval(cmdStr);
   
-  h=gcf;
-  savefig(h,[outName,'.fig']);
+  %h=gcf;
+  %savefig(h,[outName,'.fig']);
 end
 
 end
