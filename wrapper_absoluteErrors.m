@@ -1,6 +1,7 @@
-%% --- repeat but absolute the error values --- %%
+%% --- repeat general analysis but absolute the error values --- %%
 %just switches getData() with getData_AbsoluteVersion()
 %Also add '_ABSOLUTE' to thisVarStr so files are stored in new directories
+%This is NOT for pointingError_Absolute - That's handled in wrapper_pointingError
 
 listVarStrs = { 'ANGerr', ...
                 'XError', ... %delete spaces later, so not 'X Error ' etc

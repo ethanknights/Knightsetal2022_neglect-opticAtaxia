@@ -16,8 +16,6 @@ if ~done_rawData
   examineRawData_checkTrialDistribution
 end
 
-
-conditionNames = {'RHFREE','RHPER','LHFREE','LHPER'};
 sNames = {
   'DA',
   'NH06',
@@ -66,7 +64,7 @@ end
 disp('done writing rawData to data.mat')
 
 
-%% ==== ANALYSIS ==== %%
+%% ==== ANALYSIS WITH GENERAL ERRORS / TIMING VARIABLES ==== %%
 
 listVarStrs = { 'ANGerr', ...
                 'XError', ... %delete spaces later, so not 'X Error ' etc
@@ -115,21 +113,23 @@ for v = 1:length(listVarStrs)
   mkdir(outDir)
   
   
-  diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-SingleBayes_ES.txt']));
+  %diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-SingleBayes_ES.txt']));
   stats = doCrawfordTtest_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y_ttest);
   stats = doCrawfordTtest_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y_ttest);
-  diary OFF
+  %diary OFF
 
-  diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-DissocsBayes_ES.txt']));
+  %diary(fullfile(outDir,[thisVarStr,'_inputForCrawford-DissocsBayes_ES.txt']));
   plotBDST_allTargets(thisVarStr,data,conditionNames,outDir,axisVal_allTargets_y_BDST);
   plotBDST_sideOfSpace(thisVarStr,data,conditionNames,outDir,axisVal_sideOfSpace_y_BDST);
-  diary OFF
+  %diary OFF
 end
 
-%% repeat ANALYSIS with absolute error measures
-repeatWithAbsolute %ANGERR_ABSOLUTE etc. %a branch would have been smarter!!
+%% repeat GENERAL ANALYSIS (above) with absolute error measures
+wrapper_absoluteErrors %ANGERR_ABSOLUTE etc. %a branch would have been smarter!!
 
+%% ANALYSIS with 'pointing error' (Milner et al. 1999; Hesse et al. etc)
+wrapper_pointingError
+wrapper_absolutePointingError
 
 %% plot raw pointing coordinates
 plotRawPointingCoordinates
-

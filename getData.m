@@ -17,7 +17,7 @@ for s = 1:length(sNames)
     assert(length(idx) == 1,sprintf('thisVarStr %s not found for sub-%d condition-%d',thisVarStr,s,condition));
     
     for target = 1:7
-      [targetStack{s,target,condition},targetMean(s,target,condition),targetStd(s,target,condition)] = getTargetMean_AbsoluteVersion(tmpD,target,idx);
+      [targetStack{s,target,condition},targetMean(s,target,condition),targetStd(s,target,condition)] = getTargetMean(tmpD,target,idx);
       nTrials(s,target,condition) = length(targetStack{s,target,condition});
     end
   end
