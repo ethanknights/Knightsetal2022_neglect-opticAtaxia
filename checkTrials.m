@@ -1,4 +1,4 @@
-nSubs = 11; %we are about to drop AL11 
+nSubs = 12; %we are about to drop AL11 
 
 %% ==== trials analysed ==== %%
 for c = 1:4
@@ -37,7 +37,7 @@ fN = fullfile('data','trialDistributions','trialDistributions.xlsx');
 %% nTrialsCollected
 sheetName = 'nTrialsCollected';
 [~,~,rawD] = xlsread(fN,sheetName);
-tmpD = cell2mat(rawD(2:end,2:end))
+tmpD = cell2mat(rawD(2:end,2:end));
 tmpH = rawD(1,2:end)'; %1 is partiicpant
 
 tmpD(2,:) = []; %drop AL11 as we do in main analysis
@@ -65,6 +65,7 @@ tmpD = cell2mat(rawD(2:end,2:end));
 tmpH = rawD(1,2:end)'; %1 is partiicpant
 
 tmpD(2,:) = []; %drop AL11 as we do in main analysis
+nSubs = size(tmpD,1);
 
 tmp = sum(sum(tmpD))
 fprintf('total percent eye error trials = %s\n', num2str( tmp * (100 / nTrials)) )
@@ -94,6 +95,7 @@ tmpD = cell2mat(rawD(2:end,2:end));
 tmpH = rawD(1,2:end)'; %1 is partiicpant
 
 tmpD(2,:) = []; %drop AL11 as we do in main analysis
+nSubs = size(tmpD,1);
 
 tmp = sum(sum(tmpD))
 fprintf('total percent HandErrors trials = %s\n', num2str( tmp * (100 / nTrials)) )
@@ -125,6 +127,7 @@ tmpD = cell2mat(rawD(2:end,2:end));
 tmpH = rawD(1,2:end)'; %1 is partiicpant
 
 tmpD(2,:) = []; %drop AL11 as we do in main analysis
+nSubs = size(tmpD,1);
 
 tmp = sum(sum(tmpD))
 fprintf('total n noResponse trials = %s\n', num2str( tmp * (100 / nTrials)) )
