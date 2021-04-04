@@ -37,19 +37,21 @@ if(plotFig)
     figure('position',[100,100,1200,1200])
    
     %Crawford cuttoff errorbar
-    errorbar(1:nCond,mC,CI2(:,1),'Color',[0 0 0],'LineWidth',4,'LineStyle','none')
+    h=errorbar(1:nCond,mC,CI2(:,1),'Color',[0 0 0],'LineWidth',6,'LineStyle','none')
     hold on
-    line(1:nCond,mC,'Color',[0 0 0],'LineWidth',4,'LineStyle','--')
+    line(1:nCond,mC,'Color',[0 0 0],'LineWidth',6,'LineStyle','--')
+   
+    h.CapSize = 24;
     
     %all control lines
     for controlN = 1:length(allControls)
       hold on
-      line(1:nCond,allControls(controlN,:),'Color',[0    0.8314    0.9608],'LineWidth',1,'LineStyle','--')
+      line(1:nCond,allControls(controlN,:),'Color',[0    0.8314    0.9608],'LineWidth',2,'LineStyle','--')
     end
     
     %Patient circle markers
     hold on
-    plot(1:nCond,patientScores,'o','MarkerSize',18,'LineWidth',4, ...
+    plot(1:nCond,patientScores,'o','MarkerSize',40,'LineWidth',7, ...
       'Color',[1 0 1])
     
 end

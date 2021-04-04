@@ -76,6 +76,7 @@ for hand = 1:2
   
   %% plot
   plotBDST(taskX,taskY,Ncontrols)
+  pause(0.5);
   
   %% other plot formatting
   titleStr = ['CompareVision-PeripheralSubtractFree-',currHand];
@@ -85,7 +86,7 @@ for hand = 1:2
   xlim([0 length(taskX.patientScores)+1]); set(gca,'XTick',[0:1:length(taskX.patientScores)+1]);
   ylim(axisVal_y)
   xticklabels({[],'-28','-17','-11','0','11','17','28'});
-  set(gca,'box','off','color','none','TickDir','out','fontsize',18);
+  set(gca,'box','off','color','none','TickDir','out','fontsize',25);
   title(titleStr);
   
   %% save plot
@@ -94,11 +95,9 @@ for hand = 1:2
     mkdir(outDir2)
   end
   outName = fullfile(outDir2,[thisVarStr,titleStr]);
-  cmdStr = sprintf('export_fig %s.png -transparent',outName)
+  cmdStr = sprintf('export_fig %s.jpg',outName)
   eval(cmdStr);
    
-  %h=gcf;
-  %savefig(h,[outName,'.fig']);
 end
   
 
@@ -153,6 +152,7 @@ for vision = 1:2
   
   %% plot
   plotBDST(taskX,taskY,Ncontrols)
+  pause(0.5);
   
   %% other plot formatting
   titleStr = ['CompareHand-LHSubtractRH-',currVision];
@@ -162,7 +162,7 @@ for vision = 1:2
   xlim([0 length(taskX.patientScores)+1]); set(gca,'XTick',[0:1:length(taskX.patientScores)+1]);
   ylim(axisVal_y)
   xticklabels({[],'-28','-17','-11','0','11','17','28'});
-  set(gca,'box','off','color','none','TickDir','out','fontsize',18);
+  set(gca,'box','off','color','none','TickDir','out','fontsize',25);
   title(titleStr);
   
   %% save plot
@@ -171,11 +171,9 @@ for vision = 1:2
     mkdir(outDir2)
   end
   outName = fullfile(outDir2,[thisVarStr,titleStr]);
-  cmdStr = sprintf('export_fig %s.png -transparent',outName)
+  cmdStr = sprintf('export_fig %s.jpg',outName)
   eval(cmdStr);
    
-  %h=gcf;
-  %savefig(h,[outName,'.fig']);
 end
 
 end

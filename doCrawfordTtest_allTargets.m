@@ -29,6 +29,7 @@ for c = 1:4
   %% Crawford ttest (& plot)
   stats{c} = runCrawford(patientScores,controlMean,controlStd,nC, ...
     1,allControls); %for plot, use 0 for no plot
+  pause(0.5)
   
   %% other plot formatting
   xlabel(['Target Position (',char(176),' from midline)']);
@@ -36,7 +37,7 @@ for c = 1:4
   xlim([0 length(patientScores)+1]); set(gca,'XTick',[0:1:length(patientScores)+1]);
   ylim(axisVal_y)
   xticklabels({[],'-28','-17','-11','0','11','17','28'});
-  set(gca,'box','off','color','none','TickDir','out','fontsize',18);
+  set(gca,'box','off','color','none','TickDir','out','fontsize',25);
   title(currConditionName);
   
   %% save plot
@@ -45,11 +46,8 @@ for c = 1:4
     mkdir(outDir2)
   end
   outName = fullfile(outDir2,[thisVarStr,'_',currConditionName]);
-  cmdStr = sprintf('export_fig %s.png -transparent',outName)
+  cmdStr = sprintf('export_fig %s.jpg',outName)
   eval(cmdStr);
-  
-  %h=gcf;
-  %savefig(h,[outName,'.fig']);
   
   %% print stats
   disp('two tailed p (per target):')

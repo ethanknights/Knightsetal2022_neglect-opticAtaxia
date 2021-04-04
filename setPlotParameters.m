@@ -6,3 +6,4 @@ ylim([150 275]);
 set(gca,'box','off','color','none','TickDir','out','fontsize',18);
 title(currConditionName);
 grid on
+% set(gcf,'color','w')
