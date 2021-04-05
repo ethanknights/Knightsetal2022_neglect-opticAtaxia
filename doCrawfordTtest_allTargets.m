@@ -49,7 +49,7 @@ for c = 1:4
   cmdStr = sprintf('export_fig %s.jpg',outName)
   eval(cmdStr);
   
-  %% print stats
+  %% print (rough) stats
   disp('two tailed p (per target):')
   disp(stats{c}.p(2,:)') %2 is two-tailed
 
@@ -65,7 +65,9 @@ for c = 1:4
   disp('CI (per target) 1:2 is 95% CI% CI-3:4 is 99%:')
   disp([stats{c}.CI(:,1),stats{c}.CI(:,2),stats{c}.CI(:,3),stats{c}.CI(:,4)]) 
 
-
+  %% write data for singcar
+  mkdir(fullfile(outDir,'csv'))
+  writematrix(data.targetMean(:,:,c),fullfile(outDir,'csv',[conditionNames{c},'.csv']),'Delimiter',',')
 end
     
 end
