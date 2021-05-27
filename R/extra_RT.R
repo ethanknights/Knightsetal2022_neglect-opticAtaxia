@@ -97,7 +97,7 @@ currVar = 3
     df_b = df_RHPER
     
     currTarget_a = 8 #left space
-    currTarget_b = 9 #central space
+    currTarget_b = 9 #right space
     
     BSDT_sideOfSpace <- BSDT(case_a = df_a[1,currTarget_a],controls_a = df_a[2:nrow(df),currTarget_a],
                              case_b = df_b[1,currTarget_b],controls_b = df_b[2:nrow(df),currTarget_b],                          
