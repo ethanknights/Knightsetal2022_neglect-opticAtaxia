@@ -42,41 +42,29 @@ currVar = 3
   df_RHPER$leftSpace = rowMeans(x = df_RHPER[,1:3])
   df_RHPER$rightSpace = rowMeans(x = df_RHPER[,5:7])
   
-  # #======================  BTD  ======================#
-  # #--- init ---#
-  # outT_RHPER <- as.data.frame(matrix(nrow = 9, ncol = 9))
-  # 
-  # for (currTarget in 1:ncol(df_LHFREE)) {
-  #   
-  #   #--- do BTD ---#
-  #   df = df_RHPER
-  #   BTD_RHPER <- BTD(case = df[1,currTarget],controls = df[2:nrow(df),currTarget],
-  #                    alternative = c("two.sided"),int_level = 0.95,iter = 10000)
-  #   
-  #   #--- store in table ---#
-  #   outT_RHPER[currTarget,1] <- 'Right'
-  #   outT_RHPER[currTarget,2] <- 'Peripheral'
-  #   outT_RHPER[currTarget,3] <- listTargetStr[currTarget]
-  #   outT_RHPER[currTarget,4] <- round(BTD_RHPER$p.value, digits = 3)
-  #   outT_RHPER[currTarget,5] <- round(BTD_RHPER$estimate[1], digits = 2)
-  #   outT_RHPER[currTarget,6] <- round(BTD_RHPER$interval[2], digits = 2)
-  #   outT_RHPER[currTarget,7] <- round(BTD_RHPER$interval[3], digits = 2)
-  #   outT_RHPER[currTarget,8] <- round(BTD_RHPER$estimate[2], digits = 2)
-  #   outT_RHPER[currTarget,9] <- round(BTD_RHPER$interval[4], digits = 2)
-  #   outT_RHPER[currTarget,10] <- round(BTD_RHPER$interval[5], digits = 2)
-  # }  
+  #======================  Approach 1 - BDT (Left - Centre or Right) patient vs. control ======================#
+
+  #--- do BTD ---#
+  df = df_RHPER
+  
+  # left - centre
+  a = df[,8] - df[,4]
+  
+  BTD <- BTD(case = a[1],controls = a[2:nrow(df)],
+                      alternative = c("two.sided"),int_level = 0.95,iter = 10000)
+  BTD
+  
+  # left - right
+  a = df[,8] - df[,9]
+  
+  BTD <- BTD(case = a[1],controls = a[2:nrow(df)],
+             alternative = c("two.sided"),int_level = 0.95,iter = 10000)
+  BTD
+  
+
   
   
-  
-  #======================  BSDT  ======================#
-  # #--- init ---#
-  # outT_Vision_LH <- as.data.frame(matrix(nrow = 9, ncol = 9))
-  # outT_Vision_RH <- as.data.frame(matrix(nrow = 9, ncol = 9))
-  # outT_Hand_FREE <- as.data.frame(matrix(nrow = 9, ncol = 9))
-  # outT_Hand_PER <- as.data.frame(matrix(nrow = 9, ncol = 9))
-  
-  #for (currTarget in 1:ncol(df_LHFREE)) {
-    
+  #======================  Approach 2 - Side of Space BSDT ======================#
     #--- do BSDT ---#
     #- Compare Side of Space -#
   
