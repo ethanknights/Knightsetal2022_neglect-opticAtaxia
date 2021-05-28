@@ -19,7 +19,7 @@ listTargetStr = c('-28','-17','-11','0','11','17','28','Left','Right')
 #listConditionStr <- c('LHFREE','LHPER','RHFREE','RHPER')
 
 
-currVar = 3
+currVar = 2
   
   currVarStr = listVarStr[currVar]
   
