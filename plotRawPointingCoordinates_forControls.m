@@ -7,7 +7,7 @@ close all
 nSubs = 11; %D.A is sub 1, controls 2:11
 
 %% Run main deficit tests
-outDir = fullfile('results','forControls_rawPointingEndpointCoordinates');
+outDir = fullfile('results','rawPointingEndpointCoordinates_forControls');
 try
   rmdir(outDir,'s');
 catch
@@ -24,7 +24,7 @@ mkdir(outDir)
 
 %% plot parameters
 %cmap=cbrewer('seq', 'Reds', 7);
-cmap = lbmap(7,'RedBlue');
+cmap = lbmap(7);
 markerSizes = 900;
 targetX = [-250,-150,-100,0,100,150,250];
 targetY = [225,225,225,225,225,225,225];
@@ -71,15 +71,16 @@ for s = 2:11
         'LineWidth',4)
       hold on
       %%plot target references
-      scatter(targetX(t),targetY(t),1000,'black','o')
+      scatter(targetX(t),targetY(t),1000,'black','x','LineWidth',10)
     end
     setPlotParameters
     
     %% save plot
+    pause(0.5)
     outName = fullfile(outDir,['control_',sNames{s},'_',currConditionName]);
     cmdStr = sprintf('export_fig %s.png',outName) %-transparent not working
     eval(cmdStr);
     
   end
+  close all
 end
-close all
