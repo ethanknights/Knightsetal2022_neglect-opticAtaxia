@@ -128,6 +128,7 @@ for (currVar in 1:length(listVarStr)) {
   outT_BTD[29:36,2] = ""
   
   #--- write BTD ---#
+  print(file.path(rootOutDir,currVarStr,'csv','Table_BDT.csv'))
   write.csv(outT_BTD,file.path(rootOutDir,currVarStr,'csv','Table_BTD.csv'),row.names=FALSE)
   
   
@@ -232,6 +233,7 @@ for (currVar in 1:length(listVarStr)) {
   outT_BSDT[29:36,2] = ""
   
   #--- write BSDT ---#
+  print(file.path(rootOutDir,currVarStr,'csv','Table_BSDT.csv'))
   write.csv(outT_BSDT,file.path(rootOutDir,currVarStr,'csv','Table_BSDT.csv'),row.names=FALSE)
 
   
