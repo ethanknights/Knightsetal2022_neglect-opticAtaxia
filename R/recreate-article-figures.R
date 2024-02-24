@@ -13,32 +13,6 @@ graphics.off() #clear plots
 wd = dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(wd)
 
-
-do_line_plot <- function(df_summary, descript_str) {
-  
-  p <- ggplot(data = df_summary, aes(x = full_condition_name, y = mean, colour = patient_label, group = subjName)) +
-    geom_point(size = 4, alpha = 0.8, shape = 21, aes(fill = patient_label)) +
-    geom_point(size = 4, alpha = 0.8, shape = 21, colour = "black", stroke = 0.6) +
-    geom_line(size = 0.8, alpha = 0.8, aes(linetype = patient_label)) +
-    scale_color_manual(values = c("magenta", "cyan")) +
-    scale_fill_manual(values = c("magenta", "cyan")) +
-    scale_linetype_manual(values = c("solid", "dashed")) +
-    scale_x_discrete(guide = guide_axis(angle = 60)) +
-    theme(panel.background = element_blank(), panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"), 
-          legend.position = "none")
-  image_output_path = file.path(outImageDir, paste0('lineplot', descript_str, '.png'))
-  print(image_output_path)
-  ggsave(filename = image_output_path,
-         plot = p,
-         width = 15,  #width = cmwidth,
-         height = 9,  #height = cmheight,
-         units = 'cm',
-         dpi = 300,
-         limitsize = TRUE)
-  return(p)}
-
-
 format_df_collapse_space <- function(df) {
   # collapse side of space
   df$leftSpace = rowMeans(x = df[,1:3])
@@ -121,22 +95,45 @@ listVarStr = c('pointingError_ABSOLUTE','reactiontime','movementtime')
   #   arrange(factor(patient_label, levels = c("Control", "Patient")), subjName)
   
   
-  # plot
-  p <- do_line_plot(df_vision_LH, currVarStr); p
-  p <- p + labs(title = 'Mean Pointing Error by Condition and Patient'); p
+
+  
   
 
+  do_line_plot <- function(df_summary, descript_str) {
+    
+    p <- ggplot(data = df_summary, aes(x = full_condition_name, y = mean, colour = patient_label, group = subjName)) +
+      geom_point(size = 4, alpha = 0.8, shape = 21, aes(fill = patient_label)) +
+      geom_point(size = 4, alpha = 0.8, shape = 21, colour = "black", stroke = 0.6) +
+      geom_line(size = 0.8, alpha = 0.8, aes(linetype = patient_label)) +
+      scale_color_manual(values = c("magenta", "cyan")) +
+      scale_fill_manual(values = c("magenta", "cyan")) +
+      scale_linetype_manual(values = c("solid", "dashed")) +
+      scale_x_discrete(guide = guide_axis(angle = 60)) +
+      theme(panel.background = element_blank(), panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"), 
+            legend.position = "none"); p
+    image_output_path = file.path(outImageDir, paste0(descript_str, '.png'))
+    print(image_output_path)
+    ggsave(filename = image_output_path,
+           plot = p,
+           width = 15,  #width = cmwidth,
+           height = 9,  #height = cmheight,
+           units = 'cm',
+           dpi = 300,
+           limitsize = TRUE)
+    return(p)}
+  
+
+  # plot
+  df_summary <- df_vision_LH
+  df_summary <- df_summary %>%
+    arrange(factor(patient_label, levels = c("Control", "Patient")), subjName)
+  p <- do_line_plot(df_vision_LH, paste0(currVarStr,'_vision_LH')); p
+  
+  
+  # p <- do_line_plot(df_vision_RH, paste0(currVarStr,'_vision_RH')); p
+  # p <- do_line_plot(df_hand_FREE, paste0(currVarStr,'_hand_FREE')); p
+  # p <- do_line_plot(df_hand_PER, paste0(currVarStr,'_hand_PER')); p
+  
   
 #  }
-
-  
-  
-  # df_vision_LH <- df_LHPER %>%
-  #   mutate(mean = mean - df_LHFREE$mean)
-  # df_vision_RH <- df_RHPER %>%
-  #   mutate(mean = mean - df_RHFREE$mean)
-  # 
-  # df_hand_FREE <- df_LHFREE %>%
-  #   mutate(mean = mean - df_RHFREE$mean)
-  # df_hand_PER <- df_LHPER %>%
-  #   mutate(mean = mean - df_RHPER$mean)
