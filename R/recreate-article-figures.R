@@ -66,7 +66,10 @@ format_df_to_long <- function(df) {
     pivot_longer(cols = c("leftSpace", "Centre", "rightSpace"),
                  names_to = "full_condition_name",
                  values_to = "mean")
-return(df)}
+  order_levels <- c("leftSpace", "Centre", "rightSpace")
+  df$full_condition_name <- factor(df$full_condition_name, levels = order_levels)
+  return(df)
+}
 
 # Script Setup
 rootOutDir <- file.path('..','results')
