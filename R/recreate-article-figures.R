@@ -27,8 +27,9 @@ do_line_plot <- function(df_summary, descript_str) {
     theme(panel.background = element_blank(), panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"), 
           legend.position = "none")
-  
-  ggsave(filename = file.path(outImageDir, paste0('lineplot', descript_str, '.png')),
+  image_output_path = file.path(outImageDir, paste0('lineplot', descript_str, '.png'))
+  print(image_output_path)
+  ggsave(filename = image_output_path,
          plot = p,
          width = 15,  #width = cmwidth,
          height = 9,  #height = cmheight,
@@ -38,13 +39,17 @@ do_line_plot <- function(df_summary, descript_str) {
   return(p)}
 
 
-format_df <- function(df) {
+format_df_collapse_space <- function(df) {
   # collapse side of space
   df$leftSpace = rowMeans(x = df[,1:3])
   df$rightSpace = rowMeans(x = df[,5:7])
   colnames(df)[colnames(df) == "V4"] <- "Centre"
   df <- df[, c("leftSpace", "Centre", "rightSpace")]
   
+  return(df)}
+
+
+format_df_add_patient_labels <- function(df) {
   # add patient_label columns
   df <- df %>%
     mutate(
@@ -52,23 +57,27 @@ format_df <- function(df) {
       patient_label = ifelse(row_number() == 1, "Patient", "Control")
     )
   
+  return(df)}
+
+
+format_df_to_long <- function(df) {
   # long conversion
   df <- df %>%
     pivot_longer(cols = c("leftSpace", "Centre", "rightSpace"),
                  names_to = "full_condition_name",
                  values_to = "mean")
-  
-  return(df)}
+return(df)}
 
+# Script Setup
 rootOutDir <- file.path('..','results')
 outImageDir <- 'images'
 listVarStr = c('pointingError_ABSOLUTE','reactiontime','movementtime')
 # listTargetStr = c('-28','-17','-11','0','11','17','28','Left','Right')
 # listConditionStr <- c('LHFREE','LHPER','RHFREE','RHPER')
 
-
+# main - Create plots
 #for (currVar in 1:length(listVarStr)) {
-  currVar = 1 
+  currVar = 1
   currVarStr = listVarStr[currVar]
   
   #read data
@@ -78,21 +87,53 @@ listVarStr = c('pointingError_ABSOLUTE','reactiontime','movementtime')
   df_RHPER = read.csv(file.path(rootOutDir,currVarStr,'csv','RHPER.csv'), header = FALSE)
   
   # prepare for ggplot2
-  df_LHFREE <- format_df(df_LHFREE)
-  df_LHPER <- format_df(df_LHPER)
-  df_RHFREE <- format_df(df_RHFREE)
-  df_RHPER <- format_df(df_RHPER)
-
-  # Condition Comparisons
+  ## collapse space
+  df_LHFREE <- format_df_collapse_space(df_LHFREE)
+  df_LHPER <- format_df_collapse_space(df_LHPER)
+  df_RHFREE <- format_df_collapse_space(df_RHFREE)
+  df_RHPER <- format_df_collapse_space(df_RHPER)
+  
+  ## condition comparison df's
   df_vision_LH  = df_LHPER - df_LHFREE
   df_vision_RH  = df_RHPER - df_RHFREE
-  
   df_hand_FREE  = df_LHFREE - df_RHFREE
   df_hand_PER   = df_LHPER - df_RHPER
   
-  curr_df_summary <- df_summary %>% select(subjName, patient_label, full_condition_name, mean = descript_str_DV)
-  p <- do_line_plot(curr_df_summary, currVarStr); p
+  ## patient labels
+  df_vision_LH <- format_df_add_patient_labels(df_vision_LH)
+  df_vision_RH <- format_df_add_patient_labels(df_vision_RH)
+  df_hand_FREE <- format_df_add_patient_labels(df_hand_FREE)
+  df_hand_PER <- format_df_add_patient_labels(df_hand_PER)
+  
+  ## long conversion
+  df_vision_LH <- format_df_to_long(df_vision_LH)
+  df_vision_RH <- format_df_to_long(df_vision_RH)
+  df_hand_FREE <- format_df_to_long(df_hand_FREE)
+  df_hand_PER <- format_df_to_long(df_hand_PER)
+
+  # patient at bottom of table for ggplot2 layer (no effect)
+  # df_vision_LH <- df_vision_LH %>%
+  #   arrange(factor(patient_label, levels = c("Control", "Patient")), subjName)
+  # df_vision_RH <- df_vision_LH %>%
+  #   arrange(factor(patient_label, levels = c("Control", "Patient")), subjName)
+  
+  
+  # plot
+  p <- do_line_plot(df_vision_LH, currVarStr); p
   p <- p + labs(title = 'Mean Pointing Error by Condition and Patient'); p
   
+
   
 #  }
+
+  
+  
+  # df_vision_LH <- df_LHPER %>%
+  #   mutate(mean = mean - df_LHFREE$mean)
+  # df_vision_RH <- df_RHPER %>%
+  #   mutate(mean = mean - df_RHFREE$mean)
+  # 
+  # df_hand_FREE <- df_LHFREE %>%
+  #   mutate(mean = mean - df_RHFREE$mean)
+  # df_hand_PER <- df_LHPER %>%
+  #   mutate(mean = mean - df_RHPER$mean)
