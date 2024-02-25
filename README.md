@@ -24,3 +24,7 @@ source recreate_article_figures.R
 
 Data preprocessing and plotting was originally performed with matlab:
 `run_AnalysisOpticAtaxia.m`
+
+### Analysis instructions for Experiment - Bimanual Reaching
+See: https://github.com/ethanknights/neglect
+
