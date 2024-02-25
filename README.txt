@@ -1,43 +1,26 @@
-=================
-Purpose
-=================
-The purpose of this matlab pipeline is to - 
-(1) Print input for Crawford's Single Case Programs (to results/<variable>/*.txt)
-(2) Produce plots
+# Code Repository: Attention in Action - Peripheral Reaching Experiment
+R & Matlab code for Bayesian analysis of a motion-tracking [dataset]([url](https://osf.io/q8nj6/)) from a rare neuropsychological stroke patient & control-group.
 
-Run with -
-run_AnalysisOpticAtaxia.m (ultimately calls crawfordCI.m)
+## Article
+https://osf.io/preprints/psyarxiv/2qjfs
 
-Stats are printed, but statistical results in the paper are reported based 
-on calculations which have different precision restrictions, using:
-homepages.adbn.ac.uk/j.crawford/pages/dept/SingleCaseMethodsComputerPrograms.HTML
+## Citation
+Knights, E., Ford, C., McIntosh, R. D., & Rossit, S. (2021, September 6). Attention in Action: evidence from peripheral and bimanual reaching deficits in a single case study of visual neglect and extinction post-stroke.
 
+### Analysis instructions for Experiment - Peripheral Reaching
 
-=================
-Notes on rawData
-=================
-The FREEPER_database.xls was produced during my MSc by combining kine.csv's
-from the QTMpreprocess.m GUI.
+Download preprocessed data from OSF (Experiment 1) to `./results/`:
+https://osf.io/kmvhw/
 
-This matlab script will extract participants data (for the 4 conditions) to
-(1) saves rawData.mat (as a backup)
-(2) saves data.csv file with the final data and sample based on these exclusions:
-Summary of ControlDemographic_Database.xlsx:
-- data collection N = 14 (there was 1 additional control, who didnt finish experiment). 
-- 3 controls were dropped before processing as inappropriate controls (N=11):
-- LB26: gluacoma
-- DM24: not gender matched
-- RR01: missing eye tracking data
+Run analysis in R from the 'R' directory:
+```r
+source run_analysis.R
+```
 
-=================
-Contact
-=================
-Ethan Knights
-Stephanie Rossit
+Run plotting in R from the 'R' directory:
+```r
+source recreate_article_figures.R
+```
 
-
-=================
-Acknowledgements
-=================
-Thanks to Fraser Smith for writing crawfordCI.m.
-
+Data preprocessing and plotting was originally performed with matlab:
+`run_AnalysisOpticAtaxia.m`
